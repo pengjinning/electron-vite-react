@@ -17,11 +17,11 @@ export function update(win: Electron.BrowserWindow) {
   // start check
   autoUpdater.on('checking-for-update', function () { })
   // update available
-  autoUpdater.on('update-available', (arg) => {
+  autoUpdater.on('update-available', (arg: { version: any; }) => {
     win.webContents.send('update-can-available', { update: true, version: app.getVersion(), newVersion: arg?.version })
   })
   // update not available
-  autoUpdater.on('update-not-available', (arg) => {
+  autoUpdater.on('update-not-available', (arg: { version: any; }) => {
     win.webContents.send('update-can-available', { update: false, version: app.getVersion(), newVersion: arg?.version })
   })
 
@@ -68,8 +68,8 @@ function startDownload(
   callback: (error: Error | null, info: ProgressInfo | null) => void,
   complete: (event: UpdateDownloadedEvent) => void,
 ) {
-  autoUpdater.on('download-progress', info => callback(null, info))
-  autoUpdater.on('error', error => callback(error, null))
+  autoUpdater.on('download-progress', (info: ProgressInfo | null) => callback(null, info))
+  autoUpdater.on('error', (error: Error | null) => callback(error, null))
   autoUpdater.on('update-downloaded', complete)
   autoUpdater.downloadUpdate()
 }
